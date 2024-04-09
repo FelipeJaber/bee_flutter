@@ -43,16 +43,18 @@ class _GymTrackerInternState extends State<GymTrackerIntern> {
     super.initState();
   }
 
-  void checkReadyToDescansar(){
-      if(repeticoesController.text.isNotEmpty && CargaController.text.isNotEmpty && !isDescanso){
-        setState(() {
-          readyToDescansar = true;
-        });
-      }else{
-        setState(() {
-          readyToDescansar = false;
-        });
-      }
+  void checkReadyToDescansar() {
+    if (repeticoesController.text.isNotEmpty &&
+        CargaController.text.isNotEmpty &&
+        !isDescanso) {
+      setState(() {
+        readyToDescansar = true;
+      });
+    } else {
+      setState(() {
+        readyToDescansar = false;
+      });
+    }
   }
 
   void getExerciciosFeitos() {
@@ -109,7 +111,9 @@ class _GymTrackerInternState extends State<GymTrackerIntern> {
               maxHeight: heightScreen! * 0.9,
             ),
             decoration: BoxDecoration(
-                color: mainBranco, borderRadius: BorderRadius.circular(3)),
+              color: mainBranco,
+              borderRadius: BorderRadius.circular(3),
+            ),
             child: Stack(
               children: [
                 Positioned(
@@ -180,9 +184,7 @@ class _GymTrackerInternState extends State<GymTrackerIntern> {
                         height: 50,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: isDescanso
-                                ? Colors.red
-                                : Colors.green),
+                            color: isDescanso ? Colors.red : Colors.green),
                         child: Center(
                             child: Text(
                           isDescanso
@@ -212,27 +214,32 @@ class _GymTrackerInternState extends State<GymTrackerIntern> {
                                   },
                                   controller: repeticoesController,
                                   decoration: InputDecoration(
-                                      border: OutlineInputBorder()),
+                                    border: OutlineInputBorder(),
+                                  ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 5, 0, 10),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Text("Manter repetições"),
                                       GestureDetector(
                                         onTap: () {
-                                          if(repeticoesController.text.isEmpty){
+                                          if (repeticoesController
+                                              .text.isEmpty) {
                                             repeticoesController.text = "0";
                                           }
                                           setState(() {
-                                            manterRepeticoes = !manterRepeticoes;
+                                            manterRepeticoes =
+                                                !manterRepeticoes;
                                             checkReadyToDescansar();
                                           });
                                         },
-                                        child: Icon(manterRepeticoes
-                                            ? Icons.check_box_outlined
-                                            : Icons.check_box_outline_blank,
+                                        child: Icon(
+                                          manterRepeticoes
+                                              ? Icons.check_box_outlined
+                                              : Icons.check_box_outline_blank,
                                         ),
                                       ),
                                     ],
@@ -247,13 +254,15 @@ class _GymTrackerInternState extends State<GymTrackerIntern> {
                                   controller: CargaController,
                                   decoration: InputDecoration(
                                       suffixIcon: Padding(
-                                        padding: const EdgeInsets.fromLTRB(0, 12 , 0, 0),
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 12, 0, 0),
                                         child: Text("KG"),
                                       ),
                                       border: OutlineInputBorder()),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 5, 0, 10),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
@@ -261,16 +270,17 @@ class _GymTrackerInternState extends State<GymTrackerIntern> {
                                       GestureDetector(
                                         onTap: () {
                                           setState(() {
-                                            if(CargaController.text.isEmpty){
+                                            if (CargaController.text.isEmpty) {
                                               CargaController.text = "0";
                                             }
                                             manterCarga = !manterCarga;
                                             checkReadyToDescansar();
                                           });
                                         },
-                                        child: Icon(manterCarga
-                                            ? Icons.check_box_outlined
-                                            : Icons.check_box_outline_blank,
+                                        child: Icon(
+                                          manterCarga
+                                              ? Icons.check_box_outlined
+                                              : Icons.check_box_outline_blank,
                                         ),
                                       ),
                                     ],
@@ -308,8 +318,13 @@ class _GymTrackerInternState extends State<GymTrackerIntern> {
                           width: double.infinity,
                           height: 60,
                           decoration: BoxDecoration(
-                              color: !isDescanso ? readyToDescansar ? Colors.green : Colors.grey : Colors.grey,
-                              borderRadius: BorderRadius.circular(3)),
+                            color: !isDescanso
+                                ? readyToDescansar
+                                    ? Colors.green
+                                    : Colors.grey
+                                : Colors.grey,
+                            borderRadius: BorderRadius.circular(3),
+                          ),
                           child: Center(
                             child: Text(
                               seriesExecutadas ==
@@ -317,8 +332,10 @@ class _GymTrackerInternState extends State<GymTrackerIntern> {
                                   ? "Finalizar"
                                   : isDescanso
                                       ? "Continuar"
-                                      : readyToDescansar ? "Descansar" : "Preencha os campos",
-                              style: const TextStyle(fontSize: 28),
+                                      : readyToDescansar
+                                          ? "Descansar"
+                                          : "Preencha os campos",
+                                 style: const TextStyle(fontSize: 28),
                             ),
                           ),
                         ),

@@ -2,11 +2,14 @@ import 'dart:io';
 
 import 'package:bee_flutter/Commons/Colors.dart';
 import 'package:bee_flutter/Pages/HubScreen/HubScreen.dart';
+import 'package:bee_flutter/Pages/LoginScreen/authFunctions/authFunctions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bee_flutter/main.dart';
 import 'package:flutter/widgets.dart';
+
+String JWT = "";
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -18,6 +21,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController controllerRegisterNome = TextEditingController();
+  TextEditingController controllerRegisterLogin = TextEditingController();
+  TextEditingController controllerRegisterSenha = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -30,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!isMobile) {
+    if (isMobile) {
       return Material(
         child: Directionality(
           textDirection: TextDirection.ltr,
@@ -162,23 +169,31 @@ class _LoginScreenState extends State<LoginScreen> {
                                                           0, 16, 0, 0),
                                                       child: GestureDetector(
                                                         onTap: () {
-                                                          Navigator.push(context, MaterialPageRoute(builder: (context) => HubScreen()));
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          HubScreen()));
                                                         },
                                                         child: Container(
-                                                          width: double.infinity,
+                                                          width:
+                                                              double.infinity,
                                                           height: 60,
                                                           decoration:
                                                               BoxDecoration(
                                                             boxShadow: [
                                                               BoxShadow(
-                                                                color: Colors.black54
+                                                                color: Colors
+                                                                    .black54
                                                                     .withOpacity(
                                                                         0.3), // Cor da sombra
                                                                 spreadRadius:
                                                                     2, // Raio de propagação da sombra
                                                                 blurRadius:
                                                                     2, // Raio de desfoque da sombra
-                                                                offset: Offset(0,
+                                                                offset: Offset(
+                                                                    0,
                                                                     1), // Deslocamento da sombra horizontal e verticalmente
                                                               ),
                                                             ],
@@ -186,7 +201,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                                 calltoactionColor,
                                                             borderRadius:
                                                                 BorderRadius
-                                                                    .circular(3),
+                                                                    .circular(
+                                                                        3),
                                                           ),
                                                           child: Center(
                                                             child: Text(
@@ -286,6 +302,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                           ),
                                                         ),
                                                         TextField(
+                                                          controller:
+                                                              controllerRegisterNome,
                                                           decoration:
                                                               InputDecoration(
                                                             border:
@@ -315,6 +333,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                           ),
                                                         ),
                                                         TextField(
+                                                          controller:
+                                                              controllerRegisterLogin,
                                                           decoration:
                                                               InputDecoration(
                                                             border:
@@ -344,6 +364,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                                           ),
                                                         ),
                                                         TextField(
+                                                          controller:
+                                                              controllerRegisterSenha,
                                                           decoration:
                                                               InputDecoration(
                                                             border:
@@ -353,53 +375,91 @@ class _LoginScreenState extends State<LoginScreen> {
                                                       ],
                                                     ),
                                                   ),
-                                                  Container(
-                                                    width: 400,
-                                                    child: Column(
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .fromLTRB(
-                                                                  0, 16, 0, 20),
-                                                          child: Container(
-                                                            width:
-                                                                double.infinity,
-                                                            height: 60,
-                                                            decoration:
-                                                            BoxDecoration(
-                                                              boxShadow: [
-                                                                BoxShadow(
-                                                                  color: Colors.black54
-                                                                      .withOpacity(
-                                                                      0.3), // Cor da sombra
-                                                                  spreadRadius:
-                                                                  2, // Raio de propagação da sombra
-                                                                  blurRadius:
-                                                                  2, // Raio de desfoque da sombra
-                                                                  offset: Offset(0,
-                                                                      1), // Deslocamento da sombra horizontal e verticalmente
+                                                  GestureDetector(
+                                                    onTap: () async {
+                                                      try {
+                                                        String token = await authFunctions().authUser(
+                                                            controllerRegisterLogin
+                                                                .text,
+                                                            controllerRegisterSenha
+                                                                .text,
+                                                            controllerRegisterNome
+                                                                .text);
+                                                        if (token == "") {
+                                                          showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return Center(
+                                                                child:
+                                                                    Container(
+                                                                  width: 300,
+                                                                  height: 300,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                          color:
+                                                                              Colors.red),
                                                                 ),
-                                                              ],
-                                                              color:
-                                                              calltoactionColor,
-                                                              borderRadius:
-                                                              BorderRadius
-                                                                  .circular(3),
-                                                            ),
-                                                            child: Center(
-                                                              child: Text(
-                                                                "Me cadastrar",
-                                                                style: TextStyle(
-                                                                    color:
-                                                                        mainBranco,
-                                                                    fontSize:
-                                                                        18),
+                                                                  );
+                                                            },
+                                                          );
+                                                        } else {
+                                                          JWT = token;
+                                                        }
+                                                      } on Exception catch (e) {
+                                                        print(e);
+                                                      }
+                                                    },
+                                                    child: Container(
+                                                      width: 400,
+                                                      child: Column(
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .fromLTRB(0,
+                                                                    16, 0, 20),
+                                                            child: Container(
+                                                              width: double
+                                                                  .infinity,
+                                                              height: 60,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                boxShadow: [
+                                                                  BoxShadow(
+                                                                    color: Colors
+                                                                        .black54
+                                                                        .withOpacity(
+                                                                            0.3), // Cor da sombra
+                                                                    spreadRadius:
+                                                                        2, // Raio de propagação da sombra
+                                                                    blurRadius:
+                                                                        2, // Raio de desfoque da sombra
+                                                                    offset: Offset(
+                                                                        0,
+                                                                        1), // Deslocamento da sombra horizontal e verticalmente
+                                                                  ),
+                                                                ],
+                                                                color:
+                                                                    calltoactionColor,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            3),
+                                                              ),
+                                                              child: Center(
+                                                                child: Text(
+                                                                  "Me cadastrar",
+                                                                  style: TextStyle(
+                                                                      color:
+                                                                          mainBranco,
+                                                                      fontSize:
+                                                                          18),
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
-                                                        ),
-                                                      ],
+                                                        ],
+                                                      ),
                                                     ),
                                                   )
                                                 ],
